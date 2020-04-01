@@ -1,6 +1,10 @@
 #include <stdio.h>
 
-#define intcalc(expr) printf("%s = %d\n", #expr, expr)
+/*
+ * Simple demo of a long long integer calculator.
+ */
+
+#define intcalc(expr) printf("%s = %lld\n", #expr, expr)
 
 int main() {
     intcalc(20 + 3);

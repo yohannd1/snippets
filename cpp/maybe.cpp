@@ -2,10 +2,8 @@
 #include <stdexcept>
 #include <stdlib.h>
 
-using std::cout;
-
-/* An implementation of a type similar to Maybe on Haskell, or Option
-   on Rust. */
+// A kinda bad implementation of a type similar to "Maybe" on Haskell,
+// or "Option" on Rust.
 
 template <typename T>
 class Maybe {
@@ -37,6 +35,8 @@ Maybe<T>::Maybe(T *t_content) {
 }
 
 int main() {
+    using std::cout;
+
     int my_int = 10;
     Maybe<int> something(&my_int); /* Change this to NULL and it'll say "None" below. */
 

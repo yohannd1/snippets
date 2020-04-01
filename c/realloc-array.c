@@ -1,6 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+/*
+ * A simple demo of utilizing realloc to change the size of an array.
+ */
+
 int main() {
     printf("Hello, World!\n");
 

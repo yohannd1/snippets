@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 
-append() {
+## A collection of stack operations in bash.
+## Felt lazy, might make this work with dash later.
+
+stackAppend() {
   [ $# = 2 ] || exit 1
   printf "$1"
   grep -q ':$' <<<"$1" \
@@ -10,17 +13,14 @@ append() {
   printf "$2"
 }
 
-pop() {
+stackPop() {
   [ $# = 1 ] || exit 1
   sed 's/:[^:]\+$//g' <<<"$1"
 }
 
-listPush() {
+stackPush() {
   [ $# = 2 ] || exit 1
   local oldList="${!1}"
   local newList="$(append "$oldList" "$2")"
   eval "$1=${newList@Q}"
 }
-
-listPush a 1
-listPush a 1

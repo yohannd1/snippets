@@ -2,7 +2,7 @@
 #include <stdexcept>
 #include <stdlib.h>
 
-using std::cout;
+// Implementation of a dynamic array and some code to test it.
 
 template <typename T>
 class DynamicArray {
@@ -17,18 +17,6 @@ class DynamicArray {
         T& operator[](size_t t_index);
         char[] to_string();
 };
-
-int main() {
-    DynamicArray<int> my_array;
-    cout << "+ Array length: " << my_array.len() << "\n";
-    int item = 10;
-    cout << "  Pushing: " << item << "\n";
-    my_array.push(item);
-    cout << "+ Array length: " << my_array.len() << "\n";
-    cout << "  Array[0]: " << my_array[0] << "\n";
-    cout << "  Array pop: " << my_array.pop() << "\n";
-    cout << "+ Array length: " << my_array.len() << "\n";
-}
 
 template <typename T>
 DynamicArray<T>::DynamicArray() {
@@ -63,4 +51,18 @@ T& DynamicArray<T>::operator[](size_t t_index) {
     if (t_index < 0 || t_index >= _len)
         throw std::out_of_range("Index is out of range.");
     return _buffer[t_index];
+}
+
+int main() {
+    using std::cout;
+
+    DynamicArray<int> my_array;
+    cout << "+ Array length: " << my_array.len() << "\n";
+    int item = 10;
+    cout << "  Pushing: " << item << "\n";
+    my_array.push(item);
+    cout << "+ Array length: " << my_array.len() << "\n";
+    cout << "  Array[0]: " << my_array[0] << "\n";
+    cout << "  Array pop: " << my_array.pop() << "\n";
+    cout << "+ Array length: " << my_array.len() << "\n";
 }

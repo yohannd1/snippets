@@ -2,7 +2,7 @@
 
 /*
  * Iterating over an alphabet string, using math to turn lower into
- * uppercase. That's it.
+ * uppercase.
  */
 
 int main() {
