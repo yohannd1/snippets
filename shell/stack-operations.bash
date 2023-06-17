@@ -21,6 +21,6 @@ stackPop() {
 stackPush() {
   [ $# = 2 ] || exit 1
   local oldList="${!1}"
-  local newList="$(append "$oldList" "$2")"
+  local newList="$(stackAppend "$oldList" "$2")"
   eval "$1=${newList@Q}"
 }
