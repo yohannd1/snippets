@@ -14,7 +14,7 @@ int main() {
     q.pop();
     assert(q.front() == 10);
 
-    VecGraph<int> g;
+    ysl::VecGraph<int> g;
     g.insert(10);
     g.insert(86);
     g.insert(90);
@@ -24,6 +24,6 @@ int main() {
     g.connect(86, 20);
 
     std::cout
-        << bfs(g, [](int x) { return x == 20; })
+        << ysl::bfs(g, [](int x) { return x == 20; })
         << '\n';
 }
