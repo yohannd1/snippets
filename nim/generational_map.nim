@@ -1,4 +1,4 @@
-# To be used in game
+# This was created in an attempt to efficiently store a game's set of entities
 
 import
   options, sugar

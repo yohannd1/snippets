@@ -1,4 +1,1 @@
-# Makefiles
-
-This directory contains other directories with makefile environments for
-some programming languages and other use cases.
+This folder contains templates for usages of Makefiles in some specific languages or use cases.
