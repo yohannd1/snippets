@@ -23,7 +23,12 @@ int main() {
     g.connect(86, 90);
     g.connect(86, 20);
 
-    std::cout
-        << ysl::bfs(g, [](int x) { return x == 20; })
-        << '\n';
+    using std::cout;
+    using std::endl;
+
+    cout << "Breadth-first search:" << endl;
+    cout << ysl::bfs(g, [](int x) { return x == 20; }) << endl;
+
+    cout << "Depth-first search:" << endl;
+    cout << ysl::dfs(g, [](int x) { return x == 90; }) << endl;
 }

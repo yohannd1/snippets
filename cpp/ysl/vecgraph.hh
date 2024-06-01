@@ -23,7 +23,7 @@ static bool contains(const C& c, T t) {
 }
 
 /**
- * Find a vertex v in g that satisfies f(g), via broadth-first search.
+ * Find a vertex v in g that satisfies f(g), via breadth-first search.
  */
 template <typename T, typename F>
 static bool bfs(const VecGraph<T>& g, F f) {
@@ -47,6 +47,38 @@ static bool bfs(const VecGraph<T>& g, F f) {
         for (auto e : g.edges) {
             if (e.first == v && !contains(visited, e.second)) {
                 next.push(e.second);
+            }
+        }
+    }
+
+    return false;
+}
+
+/**
+ * Find a vertex v in g that satisfies f(g), via depth-first search.
+ */
+template <typename T, typename F>
+static bool dfs(const VecGraph<T>& g, F f) {
+    if (g.vertexes.size() == 0)
+        return false;
+
+    std::set<T> visited;
+    std::vector<T> next;
+    next.push_back(g.vertexes.at(0));
+
+    while (next.size() > 0) {
+        T v = next.back();
+
+        std::cout << "Visiting " << v << '\n';
+
+        if (f(v))
+            return true;
+        next.pop_back(); // is this the right one?
+        visited.insert(v);
+
+        for (auto e : g.edges) {
+            if (e.first == v && !contains(visited, e.second)) {
+                next.push_back(e.second);
             }
         }
     }
