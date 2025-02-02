@@ -59,7 +59,7 @@ def main():
 
         base_viewpoint_angle = radians(2 * global_timer)
 
-        AMOUNT_OF_LINES = 100
+        AMOUNT_OF_LINES = 20
         for line_i in range(AMOUNT_OF_LINES):
             DIVISION = 50
             MAX_CURVE_SIZE = 250
