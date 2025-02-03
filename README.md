@@ -11,8 +11,8 @@ Repo structure:
     that needs more than one file should be a folder (with said files
     inside).
 
-  To build a project, look for a `Makefile` or a `CMakeLists.txt` in
-  there.
+  To build a project, look for a `Makefile`, a `CMakeLists.txt` or a
+  related build file in there.
 
 Related repositories:
 
