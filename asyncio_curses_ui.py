@@ -1,10 +1,12 @@
-## Second attempt of an async-friendly terminal interface.
-## Uses curses instead of termios.
-## Created in 2023/08/29
+# My second attempt at an async-friendly terminal interface.
+#
+# Uses curses instead of termios this time around, cuz I was testing this on
+# Windows with a friend, I think
 
 import curses
-from dataclasses import dataclass
 import asyncio
+from dataclasses import dataclass
+from typing import Any
 
 @dataclass
 class TextBuffer:
@@ -44,16 +46,22 @@ async def main():
     global should_stop
     should_stop = False
 
-    async def job_input():
-        while not should_stop:
-            try:
-                key = win.getkey()
-            except:
-                await asyncio.sleep(0.001) # só pra nn congelar
-                continue
-            await queue.put(("key", key))
+    async def try_get_key() -> Any:
+        """Returns none if failed."""
+        try:
+            return win.getkey()
+        except:
+            return None
 
-    async def job_timed():
+    async def job_input() -> None:
+        while not should_stop:
+            key = await try_get_key()
+            if key is None:
+                await asyncio.sleep(0.001) # to keep this job from starving others
+            else:
+                await queue.put(("key", key))
+
+    async def job_timed() -> None:
         i = 0
         while not should_stop:
             await queue.put(("message", f"Timed message #{i}"))
