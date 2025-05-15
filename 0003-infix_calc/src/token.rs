@@ -30,6 +30,15 @@ struct Tokenizer<'a> {
     source: &'a str,
 }
 
+pub fn priority(op: char) -> i32 {
+    // the lower the number, the higher the priority
+    match op {
+        '*' | '/' => 1,
+        '+' | '-' => 2,
+        _ => panic!("whoops"),
+    }
+}
+
 impl<'a> Tokenizer<'a> {
     /// Create a new instance of the parser.
     ///
@@ -124,3 +133,4 @@ impl<'a> Tokenizer<'a> {
         }
     }
 }
+
