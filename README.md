@@ -1,6 +1,7 @@
 # snippets
 
-A repository with random small projects I felt like making public. Most of them are simple experiments, others are proofs-of-concept.
+A repository with random small projects I felt like making public. Most
+of them are simple experiments, others are proofs-of-concept.
 
 Repo structure:
 
@@ -21,8 +22,6 @@ Related repositories:
 
 - [compscripts](https://github.com/yohannd1/compscripts): small compiled
   utilities I make. Planning on moving them away from there.
-
-Just a repository I made with a bunch of random code snippets.
 
 The files are stored in folders based on their languages (or other
 filetypes), and they are mostly independent, but sometimes they might
