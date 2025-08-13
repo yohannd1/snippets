@@ -1,7 +1,8 @@
 // Some MSB-LSB indexing tests.
 
 module msb_lsb;
-  // The declaration syntax for packed arrays is [MSB:LSB].
+  // The declaration syntax for packed arrays is [MSB index:LSB index]. The
+  // total size of the packed array is |(MSB index) - (LSB index)| + 1.
   logic[7:0] a = 43;
   logic[0:7] b = 43;
 
@@ -14,7 +15,7 @@ module msb_lsb;
 
     // indexing is different, and it makes sense:
     // in a: a[0] is the LSB, which is 1
-    // in b: a[0] is the MSB, which is 0
+    // in b: b[0] is the MSB, which is 0
     $display("Indexing:");
     $display("a[0]=%b b[0]=%b", a[0], b[0]);
     $display();
