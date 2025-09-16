@@ -1,6 +1,6 @@
-# A Janet equivalent to Scheme's named lets.
-
 (defmacro named-let
+  "A Janet equivalent to Scheme's named lets."
+
   [name bindings & body]
 
   (if (not (symbol? name))

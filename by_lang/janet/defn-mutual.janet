@@ -1,7 +1,6 @@
-# An attempt at mutually recursive functions.
-# Somewhat based in Scheme's `letrec` macro.
-
 (defmacro defn-mutual
+  "Define mutually recursive functions.
+  Somewhat based off scheme's `letrec` macro."
   [& decls]
 
   (def d-types (map 0 decls))
