@@ -1,3 +1,5 @@
+# main reference: https://github.com/janet-lang/janet/discussions/1559
+
 (defmacro named-let
   "A Janet equivalent to Scheme's named lets."
 

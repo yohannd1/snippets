@@ -22,14 +22,10 @@
        (last body)]))
 
   (var result end)
-
-  (var i (dec (length forms)))
-  (while (>= i 0)
+  (loop [i :down-to [(dec (length forms)) 0]]
     (def form (in forms i))
     (assert (tuple? form) (string/format "form should be a tuple, got %j" form))
-    (set result [;form result])
-    (-- i))
-
+    (set result [;form result]))
   result)
 
 (nest
