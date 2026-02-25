@@ -2,7 +2,8 @@
 #define _DEFER_HH
 
 /**
- * Runs a function after its scope is exited. Inspired by Zig's "defer" keyword.
+ * Runs a function after its scope is exited. Inspired by Zig's "defer"
+ * keyword.
  *
  * Inspired by https://www.gingerbill.org/article/2015/08/19/defer-in-cpp/
  */

@@ -3,7 +3,10 @@
 #include <string>
 
 /**
- * An experiment with type traits.
+ * An experiment with type traits and concepts.
+ *
+ * The goal is to have a `to_string` function and a concept that requires a
+ * type for it to be implemented.
  */
 
 template <class T>
@@ -11,7 +14,7 @@ auto to_string(const T& obj) -> std::string;
 
 template <class Self>
 concept ToString = requires(const Self& self) {
-    { to_string(self) } ->std::same_as<std::string>;
+    { to_string(self) } -> std::same_as<std::string>;
 };
 
 template <>
@@ -26,4 +29,5 @@ auto print(const ToString auto& obj) -> void {
 int main() {
     print(50);
     print(255);
+    return 0;
 }
