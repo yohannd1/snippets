@@ -1,5 +1,4 @@
 from amaranth import Shape, Const, C, signed, unsigned
-from amaranth.lib.wiring import In, Out, Component
 
 # Reference: https://amaranth-lang.org/docs/amaranth/v0.5.8/guide.html
 
