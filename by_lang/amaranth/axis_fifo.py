@@ -10,29 +10,28 @@ from amaranth.sim import Simulator, Period
 class AxisFifo(Component):
     """AXI-Stream compatible FIFO queue."""
 
-    def __init__(self, width, depth) -> None:
+    def __init__(self, shape, depth) -> None:
         assert depth > 0, "Queue depth/size must be positive"
 
-        self.width = width
+        self.shape = shape
         self.depth = depth
 
-        # TODO: experiment using a whole ass signal instead of just receiving the width
         super().__init__({
             # write interface
             "ivalid_in": In(1),
-            "idata_in": In(width),
-            "iready_out": In(width),
+            "idata_in": In(shape),
+            "iready_out": In(1),
 
             # read interface
             "ovalid_out": Out(1),
-            "odata_out": Out(width),
+            "odata_out": Out(shape),
             "oready_in": In(1),
         })
 
     def elaborate(self, _platform) -> Module:
         m = Module()
 
-        width = self.width
+        shape = self.shape
         depth = self.depth
 
         ivalid_in = self.ivalid_in
@@ -44,7 +43,7 @@ class AxisFifo(Component):
 
         # https://amaranth-lang.org/docs/amaranth/latest/stdlib/memory.html
         m.submodules.memory = memory = Memory(
-            shape=unsigned(width),
+            shape=self.shape,
             depth=depth,
             init=[0 for _ in range(depth)],
         )
@@ -114,7 +113,7 @@ class AxisFifo(Component):
 def main() -> None:
     width = 8
     depth = 7
-    uut = AxisFifo(width, depth)
+    uut = AxisFifo(unsigned(width), depth)
 
     # from amaranth.back import verilog
     # v_out = verilog.convert(uut, ports=[], emit_src=False)
