@@ -2,7 +2,7 @@
 #
 # https://github.com/amaranth-lang/amaranth/issues/1523
 
-from amaranth import Module, Signal, unsigned, Cat, C, Shape
+from amaranth import Module, Signal, unsigned, Cat, C, Shape, Mux
 from amaranth.lib.memory import Memory
 from amaranth.lib.wiring import In, Out, Component
 from amaranth.sim import Simulator, Period
@@ -61,37 +61,50 @@ class AxisFifo(Component):
         wr_trans = ivalid_in & iready
 
         wr_port = memory.write_port()
-        m.d.comb += wr_port.en.eq(wr_trans)
-        m.d.comb += wr_port.addr.eq(wr_addr)
-        m.d.comb += wr_port.data.eq(idata_in)
+        m.d.comb += [
+            wr_port.en.eq(wr_trans),
+            wr_port.addr.eq(wr_addr),
+            wr_port.data.eq(idata_in),
+        ]
 
         rd_addr = Signal(Address, init=0)
         rd_trans = ovalid & oready_in
 
-        rd_port = memory.read_port()
-        m.d.comb += rd_port.addr.eq(rd_addr)
-        m.d.comb += odata_out.eq(rd_port.data)
+        rd_port = memory.read_port(domain="comb")
+        m.d.comb += [
+            rd_port.addr.eq(rd_addr),
+            odata_out.eq(rd_port.data),
+        ]
 
-        with m.Switch(Cat(wr_trans, rd_trans)):
+        next_rd_addr = Mux(rd_addr == depth - 1, 0, rd_addr + 1)
+        next_wr_addr = Mux(wr_addr == depth - 1, 0, wr_addr + 1)
+
+        with m.Switch(Cat(rd_trans, wr_trans)):
             with m.Case("00"):
                 pass # do nothing
 
             with m.Case("01"):
                 # read out
-                m.d.sync += rd_addr.eq(rd_addr + 1)
-                m.d.sync += full.eq(0)
-                m.d.sync += empty.eq(rd_addr == wr_addr)
+                m.d.sync += [
+                    rd_addr.eq(next_rd_addr),
+                    full.eq(0),
+                    empty.eq(next_rd_addr == wr_addr),
+                ]
 
             with m.Case("10"):
                 # write in
-                m.d.sync += wr_addr.eq(wr_addr + 1)
-                m.d.sync += empty.eq(0)
-                m.d.sync += full.eq(rd_addr == wr_addr)
+                m.d.sync += [
+                    wr_addr.eq(next_wr_addr),
+                    empty.eq(0),
+                    full.eq(rd_addr == next_wr_addr),
+                ]
 
             with m.Case("11"):
                 # both
-                m.d.sync += rd_addr.eq(rd_addr + 1)
-                m.d.sync += wr_addr.eq(wr_addr + 1)
+                m.d.sync += [
+                    rd_addr.eq(next_rd_addr),
+                    wr_addr.eq(next_wr_addr),
+                ]
 
         m.d.comb += iready_out.eq(iready)
         m.d.comb += ovalid_out.eq(ovalid)
@@ -109,17 +122,37 @@ def main() -> None:
 
     async def bench(ctx):
         assert ctx.get(uut.ovalid_out) == 0
+        assert ctx.get(uut.iready_out) == 1
         ctx.set(uut.idata_in, 0)
         ctx.set(uut.ivalid_in, 0)
         ctx.set(uut.oready_in, 0)
         await ctx.tick()
 
-        # TODO: validate things...
+        values = [(i + 1) * 2 for i in range(depth)]
+
+        for v in values:
+            assert ctx.get(uut.iready_out) == 1
+            ctx.set(uut.idata_in, v)
+            ctx.set(uut.ivalid_in, 1)
+            await ctx.tick()
+
+            assert ctx.get(uut.ovalid_out) == 1
+
+        assert ctx.get(uut.iready_out) == 0
+        ctx.set(uut.ivalid_in, 0)
+
+        for v in values:
+            assert ctx.get(uut.odata_out) == v
+            ctx.set(uut.oready_in, 1)
+            await ctx.tick()
+
+        assert ctx.get(uut.ovalid_out) == 0
 
     sim = Simulator(uut)
     sim.add_clock(Period(MHz=1))
     sim.add_testbench(bench)
-    sim.run()
+    with sim.write_vcd("waveform.vcd"):
+        sim.run()
 
 if __name__ == "__main__":
     main()

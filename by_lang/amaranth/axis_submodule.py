@@ -1,6 +1,6 @@
 # AXI-Stream submodule test
 
-from amaranth import Module, Signal, unsigned
+from amaranth import Module, Signal
 from amaranth.lib.wiring import In, Out, Component
 from amaranth.sim import Simulator, Period
 
